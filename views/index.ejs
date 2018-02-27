@@ -32,6 +32,55 @@
       <div class="page-header"><h1><b>Lab Conditions</b></h1></div>
 
       <div class="row row-eq-height">
+
+        <div class="col-md-3">
+          <div class="panel panel-default" style=" height:100%;">
+              <div class="panel-heading">
+                  <h4>Intrusion Detection</h4><small id="pir_value">(no value recieved)</small>
+              </div>
+              <div class="panel-body">
+                <table>
+                  <table>
+                  <tr width="30%" style="vertical-align:middle;">
+                    <td>
+                      <div style="height:20px; width:45%;">
+                        <canvas id="pir1Chart" ></canvas>
+                      </div>
+                    </td>
+                    <td><div>&nbsp;&nbsp;&nbsp;</div></td>
+                    <td>
+                      <h4>&nbsp;<span id="pir1" class="label label-success">Nothing</span></h4>
+                    </td>
+                  </tr>
+
+                  <tr width="30%" style="vertical-align:middle;">
+                    <td>
+                      <div style="height:20px; width:45%;">
+                        <canvas id="pir2Chart" ></canvas>
+                      </div>
+                    </td>
+                    <td><div>&nbsp;&nbsp;&nbsp;</div></td>
+                    <td>
+                      <h4>&nbsp;<span id="pir2" class="label label-success">Nothing</span></h4>
+                    </td>
+                  </tr>
+
+                  <tr width="30%" style="vertical-align:middle;">
+                    <td>
+                      <div style="height:20px; width:45%;">
+                        <canvas id="pir3Chart" ></canvas>
+                      </div>
+                    </td>
+                    <td><div>&nbsp;&nbsp;&nbsp;</div></td>
+                    <td>
+                      <h4>&nbsp;<span id="pir3" class="label label-success">Nothing</span></h4>
+                    </td>
+                  </tr>
+                  </table>
+              </div>
+          </div>
+        </div>
+
         <div class="col-md-3">
           <div class="panel panel-default" style=" height:100%;">
               <div class="panel-heading">
@@ -55,22 +104,6 @@
         <div class="col-md-3">
           <div class="panel panel-default" style=" height:100%;">
               <div class="panel-heading">
-                  <h4>Intrusion Detection</h4><small id="pir_value">(no value recieved)</small>
-              </div>
-              <div class="panel-body">
-                <table>
-                  <table>
-                  <tr width="30%" style="vertical-align:middle;"><h4>&nbsp;<span id="pir1" class="label label-success">Nothing</span></h4></tr>
-                  <tr width="30%" style="vertical-align:middle;"><h4>&nbsp;<span id="pir2" class="label label-success">Nothing</span></h4></tr>
-                  <tr width="30%" style="vertical-align:middle;"><h4>&nbsp;<span id="pir3" class="label label-success">Nothing</span></h4></tr>
-                  </table>
-              </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="panel panel-default" style=" height:100%;">
-              <div class="panel-heading">
                   <h4>Sound Classification</h4><small id="audio_result">(no value recieved)</small>
               </div>
               <div class="panel-body">
@@ -82,7 +115,7 @@
         <div class="col-md-3">
           <div class="panel panel-default" style=" height:100%;">
               <div class="panel-heading">
-                  <h4>Air Pollusion Monitor</h4><small id="heat_map_result">(no value recieved)</small>
+                  <h4>Air Pollution Monitor</h4><small id="heat_map_result">(no value recieved)</small>
               </div>
               <div class="panel-body">
                 <table>
@@ -99,14 +132,13 @@
           </div>
         </div>
 
-
       </div>
       <hr>
       <div class="row row-eq-height">
         <div class="col-md-3">
           <div class="panel panel-default" style=" height:100%;">
               <div class="panel-heading">
-                  <h4>MQ5</h4><small id="mq5Sensor">(no value recieved)</small>
+                  <h4>CO2</h4><small id="mq5Sensor">(no value recieved)</small>
               </div>
               <div class="panel-body">
                 <table>
