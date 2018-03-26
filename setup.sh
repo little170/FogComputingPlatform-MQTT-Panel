@@ -1,0 +1,2 @@
+export MQTTPANELPORT=6060
+export MQTTBROKER=mqtt:192.168.0.99

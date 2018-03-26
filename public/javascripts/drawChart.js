@@ -11,6 +11,10 @@ var pir1Values = [];
 var pir2Values = [];
 var pir3Values = [];
 
+var co2neValues = [];
+var co2nwValues = [];
+var co2swValues = [];
+
 mq5Values.length = samples;
 mq7Values.length = samples;
 mq131Values.length = samples;
@@ -20,6 +24,10 @@ pir1Values.length =samples;
 pir2Values.length =samples;
 pir3Values.length =samples;
 
+co2neValues.length =samples;
+co2nwValues.length =samples;
+co2swValues.length =samples;
+
 mq5Values.fill(0);
 mq7Values.fill(0);
 mq131Values.fill(0);
@@ -28,6 +36,10 @@ mq135Values.fill(0);
 pir1Values.fill(0);
 pir2Values.fill(0);
 pir3Values.fill(0);
+
+co2neValues.fill(0);
+co2nwValues.fill(0);
+co2swValues.fill(0);
 
 var labels = [];
 labels.length = samples;
@@ -241,6 +253,105 @@ function initializeChart() {
           data: pir3Values,
           backgroundColor: 'rgba(0, 102, 255, 0.1)',
           borderColor: 'rgb(0, 102, 255)',
+          borderWidth: 2,
+          lineTension: 0.25,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        animation: {
+          duration: speed * 1.5,
+          easing: 'linear'
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: false
+          }],
+          yAxes: [{
+            display: false
+          }]
+        }
+      }
+    }),
+    new Chart(document.getElementById("co2-ne-Chart"), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: co2neValues,
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          borderColor: 'rgb(255, 99, 132)',
+          borderWidth: 2,
+          lineTension: 0.25,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        animation: {
+          duration: speed * 1.5,
+          easing: 'linear'
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: false
+          }],
+          yAxes: [{
+            display: false
+          }]
+        }
+      }
+    }),
+    new Chart(document.getElementById("co2-nw-Chart"), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: co2nwValues,
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          borderColor: 'rgb(255, 99, 132)',
+          borderWidth: 2,
+          lineTension: 0.25,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        animation: {
+          duration: speed * 1.5,
+          easing: 'linear'
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+          xAxes: [{
+            display: false
+          }],
+          yAxes: [{
+            display: false
+          }]
+        }
+      }
+    }),
+    new Chart(document.getElementById("co2-sw-Chart"), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: co2swValues,
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          borderColor: 'rgb(255, 99, 132)',
           borderWidth: 2,
           lineTension: 0.25,
           pointRadius: 0

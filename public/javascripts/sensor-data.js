@@ -44,7 +44,14 @@ socket.on('connect', function () {
       case 'sound_detect':
         $('#audio_result').html('(Sound: ' + payload + '...)');
         $('#sound').text(payload);
-        $('#sound').addClass('label-default');
+        $('#sound').removeClass('label-success').addClass('label-default');
+
+        break;
+
+      case 'image_capture':
+        $('#yolo_result').html('(Object: ' + payload + '...)');
+        $('#object').text(payload);
+        $('#object').removeClass('label-success').addClass('label-default');
 
         break;
 
@@ -109,7 +116,7 @@ socket.on('connect', function () {
         }
         break;
 
-      case 'pollution_air_mq5':
+      case 'pollution_air_mg811_rpi5':
         var mq5_value = (parseFloat(payload))+"";
         $('#mq5Sensor').html('(Sensor value: ' + mq5_value + ')');
         $('#mq5Label').text(mq5_value);
@@ -117,6 +124,42 @@ socket.on('connect', function () {
 
         mq5Values.push(mq5_value);
         mq5Values.shift();
+        charts.forEach(function(chart) { chart.update(); });
+
+        break;
+
+      case 'pollution_air_mg811_rpi1':
+        var co2_ne_value = (parseFloat(payload))+"";
+        $('#co2-ne-Sensor').html('(Sensor value: ' + co2_ne_value + ')');
+        $('#co2-ne-Label').text(co2_ne_value);
+        $('#co2-ne-Label').removeClass('').addClass('label-primary');
+
+        co2neValues.push(co2_ne_value);
+        co2neValues.shift();
+        charts.forEach(function(chart) { chart.update(); });
+
+        break;
+
+      case 'pollution_air_mg811_rpi2':
+        var co2_nw_value = (parseFloat(payload))+"";
+        $('#co2-nw-Sensor').html('(Sensor value: ' + co2_nw_value + ')');
+        $('#co2-nw-Label').text(co2_nw_value);
+        $('#co2-nw-Label').removeClass('').addClass('label-primary');
+
+        co2nwValues.push(co2_nw_value);
+        co2nwValues.shift();
+        charts.forEach(function(chart) { chart.update(); });
+
+        break;
+
+      case 'pollution_air_mg811_rpi3':
+        var co2_sw_value = (parseFloat(payload))+"";
+        $('#co2-sw-Sensor').html('(Sensor value: ' + co2_sw_value + ')');
+        $('#co2-sw-Label').text(co2_sw_value);
+        $('#co2-sw-Label').removeClass('').addClass('label-primary');
+
+        co2swValues.push(co2_sw_value);
+        co2swValues.shift();
         charts.forEach(function(chart) { chart.update(); });
 
         break;
