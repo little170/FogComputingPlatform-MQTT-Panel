@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A web interface for MQTT">
+    <meta name="author" content="Fabian Affolter">
+
+    <title>Lab Conditions</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- socket.io. -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Chart -->
+    <script type="text/javascript" src="javascripts/Chart.min.js"></script>
+    <!--script type="text/javascript" src="javascripts/drawChart.js"></script-->
+    <!-- lightbox -->
+    <link rel="stylesheet" href="stylesheets/lightbox.min.css">
+    <script type="text/javascript" src="javascripts/lightbox.js"></script>
+
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script type="text/javascript" src="javascripts/sensor-data.js"></script>
+    <!-- MQTT -->
+    <!script src="javascripts/mqttws31.js"></script>
+    <script src="javascripts/browserMqtt.js"></script>
+    <script src="javascripts/mqtt-pub.js"></script>
+    <!-- Counter-->
+    <script src="javascripts/counters.js"></script>
+  </head>
+
+  <style>
+    .info{
+      width: 350px;
+      height: 150px;
+      margin-left: 20px;
+      margin-right: 20px;
+      display: flex;
+      // justify-content: center;
+      // align-items: center;
+    }
+    .grid-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-gap:0px;
+      align-content: center;
+      padding: 0px 14px ;
+    }
+    .grid-container2 {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      grid-gap:2px;
+      align-content: center;
+      padding: 0px 14px;
+    }
+</style>
+<body>
+
+    <div class="container" style="width: 100%;">
+      <!div class="page-header">
+      <div class="w3-bar" style="background-color:#4682B4"><div class="w3-bar-item">
+	   <h4 style="color:white">&nbsp;Surveillance Video Feeds</h4>
+      </div></div>
+
+      <div class="row row-eq-height">
+      <div class="grid-container">
+	  <div class="stream">
+              <div class="panel panel-default" style=" height:100%;">
+              <div class="panel-heading">
+                  <h6>Box IPcam Video Streaming</h4>
+              </div>
+              <div class="panel-body" align="center">
+                     <video width="400" autoplay muted>
+                     <source src="http://140.114.89.66:8090/1.webm" type="video/webm">
+                     Your browser does not support HTML5 video.
+                    </video>
+              </div>
+              </div>
+          </div>
+
+	  <div class="stream">
+              <div class="panel panel-default" style=" height:100%;">
+              <div class="panel-heading">
+                  <h6>Bullet IPcam Video Streaming</h4>
+              </div>
+              <div class="panel-body" align="center">
+                     <video width="300" autoplay muted>
+                     <source src="http://140.114.89.66:8090/8.webm" type="video/webm">
+                     Your browser does not support HTML5 video.
+                    </video>
+              </div>
+              </div>
+          </div>
+
+	  <div class="stream"> 
+              <div class="panel panel-default" style=" height:100%;">
+              <div class="panel-heading">
+                  <h6>PTZ IPcam Video Streaming</h4>
+              </div>
+              <div class="panel-body" align="center">
+                     <video width="300" autoplay muted>
+                     <source src="http://140.114.89.66:8090/7.webm" type="video/webm">
+                     Your browser does not support HTML5 video.
+                    </video>
+              </div>
+              </div>
+          </div>
+
+      </div>
+      </div>
+
+      <div class="w3-bar" style="background-color:#4682B4"><div class="w3-bar-item">
+	   <h4 style="color:white">&nbsp;IoT Analytic on Edge V.S. Cloud</h4>
+      </div></div>
+      <div class="w3-bar w3-black">
+              <div class="w3-bar-item"><p>Demo APP: Object Detection</p></div>
+              <div class="w3-bar-item"><p id="app_ver">Version: 0</p></div>
+              <button class="w3-bar-item w3-hover-amber w3-button w3-right" id="mqtt_pub_start" type="button" onclick='start(); timestart();' >Start Detecting</button>
+	      <button class="w3-bar-item w3-hover-amber w3-button w3-right" id="mqtt_pub_upgrade" type="button"  onclick='upgrade()'>Upgrade</button>
+	      <button class="w3-bar-item w3-hover-amber w3-button w3-right" id="mqtt_pub_dwgrade" type="button" onclick='dwgrade()' >Downgrade</button>
+      </div>
+
+      <div class="row row-eq-height">
+	<div class="grid-container2">
+          <div class="edge-result">
+              <div class="panel panel-default" style=" height:100%; border-color:#02df82 ;border-width:1px;border-style:solid;">
+              <div class="panel-body" align="center">
+		    <table>
+		      <tr>
+		      <td>
+                         <div class="info" style="background-color:#white; left:right">
+			  <ul>
+			     <li><p id="edge-ready" color="#ff0066"> Not ready </p></li>	    
+			     <li><p id="edge-deploy"> Deployment success </p></li>  
+			     <li><p id="edge-analyze"> Analysis complete </p></li>	      
+			     <li><p id="edge-transmission"> Transmission complete </p></li>	                                <li><p id="edge-latency"> Latency: 0 s </p></li>	                            
+			  </ul> 
+		         </div>
+		      </td>
+		      <td>
+                         <h4>&nbsp;<span id="object_edge" class="label label-default">Unknown</span></h4>
+                         <a href="images/result.jpg" data-lightbox="result_big">
+                         <img src="images/result.jpg" height="250" alt="result_small" />
+                         </a>
+		      </td>
+		    </table>
+              </div>
+              </div>
+          </div>
+
+	  <div class="cloud-result">
+              <div class="panel panel-default" style=" height:100%; border-color:#66b3ff;border-width:1px;border-style:solid;">
+              <div class="panel-body" align="center">
+                    <table>
+		      <tr>
+		      <td>
+		         <h4>&nbsp;<span id="object_server" class="label label-default">Unknown</span></h4>
+                         <a href="images/result_server.jpg" data-lightbox="result_big">
+                         <img src="images/result_server.jpg" height="250" alt="result_small" />
+                         </a>
+		      </td>
+		      <td>
+			 <div class="info" style="background-color:white; float:left;">
+			  <ul>
+			     <li><p id="cloud-ready" color="#ff0066"> Not ready </p></li>	    
+			     <li><p id="cloud-deploy"> Deployment success </p></li>  
+			     <li><p id="cloud-analyze"> Analysis complete </p></li>	      
+			     <li><p id="cloud-transmission"> Transmission complete </p></li> 
+			     <li><p id="cloud-latency"> Latency: 0 s</p></li>	      
+			  </ul> 
+		         </div>
+		      </td>
+		      </table>
+              </div>
+              </div>
+          </div>
+      </div>
+      </div>
+
+
+      <br>
+      <div class="panel panel-default">
+        <div class="panel-body">
+                <b>Latest MQTT message:  </b> <small id="message">no message recieved</small>
+        </div>
+      </div>
+
+      <hr>
+      <div style="width:100%; height:200px; background-color:#F5F5F5; position:relative;">
+           <img src="images/bears.png" style="display:block; margin:auto;" align="middle" height="170">
+	   <div align="center" style="position:absolute; bottom:0; left:0; right:0; color:#888888; padding: 3px;">
+	      Networking and Multimedia Systems Lab, National Tsing Hua University
+           </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>

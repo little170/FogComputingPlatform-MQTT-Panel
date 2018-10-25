@@ -1,12 +1,9 @@
-var mq5 = new Array();
-var mq7 = new Array();
-var mq131 = new Array();
-var mq135 = new Array();
-var pir1 = new Array();
-var pir2 = new Array();
-var pir3 = new Array();
 var headCount = new Array();
 var socket = io.connect();
+
+function initializeChart(){
+ console.log('initializeChart');
+}
 
 socket.on('connect', function () {
   socket.on('mqtt', function (msg) {
@@ -18,185 +15,67 @@ socket.on('connect', function () {
     //console.log(String.fromCharCode.apply(null, new Uint8Array(msg.payload)));
 
     var payload = String.fromCharCode.apply(null, new Uint8Array(msg.payload));
+    var device = String.fromCharCode.apply(null, new Uint8Array(msg.payload));
 
     $('#topic').html(msg.topic);
     $('#message').html(msg.topic + ', ' + payload);
     var obj = JSON.parse(payload);
     payload = obj.d.value;
-    //console.log('payload: '+payload);
+    device = obj.d.device;
+    console.log('payload: '+payload+ ' device:'+device);
 
-    switch (sensor) {
+    switch (sensor+"|"+ device) {
 
-      case 'heatmap':
-        $('#heat_map_result').html('(Pollution Range: ' + payload + ')');
-        $('#heat_map').text(payload);
-        $('#heat_map').removeClass('label-danger').addClass('label-success');
-
+      case 'yolo|pc1':
+        $('#object_edge').text(payload);
+        $('#object_edge').removeClass('label-danger').addClass('label-success');
+        if (payload=="NotReady"){
+         document.getElementById("edge-ready").style.color="#ff0066";
+         document.getElementById("edge-transmission").style.color="#000000";
+         document.getElementById("edge-analyze").style.color="#000000";
+         document.getElementById("edge-deploy").style.color="#000000";
+	}else if(payload=="Transcating"){
+         document.getElementById("edge-ready").style.color="#000000";
+         document.getElementById("edge-transmission").style.color="#ff0066";
+         document.getElementById("edge-analyze").style.color="#000000";
+         document.getElementById("edge-deploy").style.color="#000000";
+	}else if(payload=="Analyzing"){
+         document.getElementById("edge-ready").style.color="#000000";
+         document.getElementById("edge-transmission").style.color="#000000";
+         document.getElementById("edge-analyze").style.color="#ff0066";
+         document.getElementById("edge-deploy").style.color="#000000";
+	}else if(payload=="Deploy"){
+         document.getElementById("edge-ready").style.color="#000000";
+         document.getElementById("edge-transmission").style.color="#000000";
+         document.getElementById("edge-analyze").style.color="#000000";
+         document.getElementById("edge-deploy").style.color="#ff0066";
+	}
         break;
 
-      case 'audio':
-        $('#audio_result').html('(Sound: ' + payload + ')');
-        $('#sound').text(payload);
-        $('#sound').removeClass('label-danger').addClass('label-success');
-
-        break;
-
-      case 'sound_detect':
-        $('#audio_result').html('(Sound: ' + payload + '...)');
-        $('#sound').text(payload);
-        $('#sound').removeClass('label-success').addClass('label-default');
-
-        break;
-
-      case 'image_capture':
-        $('#yolo_result').html('(Object: ' + payload + '...)');
-        $('#object').text(payload);
-        $('#object').removeClass('label-success').addClass('label-default');
-
-        break;
-
-      case 'yolo':
-        $('#yolo_result').html('(Object: ' + payload + ')');
-        $('#object').text(payload);
-        $('#object').removeClass('label-danger').addClass('label-success');
-
-        break;
-
-      case 'motion':
-        $('#pir_value').html('(Sense value: ' + payload + ')');
-        //console.log("which"+message[2])
-        if (payload == '0') {
-          switch (message[2]){
-            case 'rpi1':
-              $('#pir1').text('Nothing');
-              $('#pir1').removeClass('label-danger').addClass('label-success');
-              pir1Values.push(payload);
-              pir1Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-            case 'rpi2':
-              $('#pir2').text('Nothing');
-              $('#pir2').removeClass('label-danger').addClass('label-success');
-              pir2Values.push(payload);
-              pir2Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-            case 'rpi3':
-              $('#pir3').text('Nothing');
-              $('#pir3').removeClass('label-danger').addClass('label-success');
-              pir3Values.push(payload);
-              pir3Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-          }
-        } else {
-          switch (message[2]){
-            case 'rpi1':
-              $('#pir1').text('Motion');
-              $('#pir1').removeClass('label-success').addClass('label-danger');
-              pir1Values.push(payload);
-              pir1Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-            case 'rpi2':
-              $('#pir2').text('Motion');
-              $('#pir2').removeClass('label-success').addClass('label-danger');
-              pir2Values.push(payload);
-              pir2Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-            case 'rpi3':
-              $('#pir3').text('Motion');
-              $('#pir3').removeClass('label-success').addClass('label-danger');
-              pir3Values.push(payload);
-              pir3Values.shift();
-              charts.forEach(function(chart) { chart.update(); });
-              break;
-            }
-        }
-        break;
-
-      case 'pollution_air_mg811_rpi5':
-        var mq5_value = (parseFloat(payload))+"";
-        $('#mq5Sensor').html('(Sensor value: ' + mq5_value + ')');
-        $('#mq5Label').text(mq5_value);
-        $('#mq5Label').removeClass('').addClass('label-primary');
-
-        mq5Values.push(mq5_value);
-        mq5Values.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mg811_rpi1':
-        var co2_ne_value = (parseFloat(payload))+"";
-        $('#co2-ne-Sensor').html('(Sensor value: ' + co2_ne_value + ')');
-        $('#co2-ne-Label').text(co2_ne_value);
-        $('#co2-ne-Label').removeClass('').addClass('label-primary');
-
-        co2neValues.push(co2_ne_value);
-        co2neValues.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mg811_rpi2':
-        var co2_nw_value = (parseFloat(payload))+"";
-        $('#co2-nw-Sensor').html('(Sensor value: ' + co2_nw_value + ')');
-        $('#co2-nw-Label').text(co2_nw_value);
-        $('#co2-nw-Label').removeClass('').addClass('label-primary');
-
-        co2nwValues.push(co2_nw_value);
-        co2nwValues.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mg811_rpi3':
-        var co2_sw_value = (parseFloat(payload))+"";
-        $('#co2-sw-Sensor').html('(Sensor value: ' + co2_sw_value + ')');
-        $('#co2-sw-Label').text(co2_sw_value);
-        $('#co2-sw-Label').removeClass('').addClass('label-primary');
-
-        co2swValues.push(co2_sw_value);
-        co2swValues.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mq7':
-        var mq7_value = (parseFloat(payload))+"";
-        $('#mq7Sensor').html('(Sensor value: ' + mq7_value + ')');
-        $('#mq7Label').text(mq7_value);
-        $('#mq7Label').removeClass('').addClass('label-primary');
-
-        mq7Values.push(mq7_value);
-        mq7Values.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mq131':
-        var mq131_value = (parseFloat(payload))+"";
-        $('#mq131Sensor').html('(Sensor value: ' + mq131_value + ')');
-        $('#mq131Label').text(mq131_value);
-        $('#mq131Label').removeClass('').addClass('label-primary');
-
-        mq131Values.push(mq131_value);
-        mq131Values.shift();
-        charts.forEach(function(chart) { chart.update(); });
-
-        break;
-
-      case 'pollution_air_mq135':
-        var mq135_value = (parseFloat(payload))+"";
-        $('#mq135Sensor').html('(Sensor value: ' + mq135_value + ')');
-        $('#mq135Label').text(mq135_value);
-        $('#mq135Label').removeClass('').addClass('label-primary');
-
-        mq135Values.push(mq135_value);
-        mq135Values.shift();
-        charts.forEach(function(chart) { chart.update(); });
+      case 'yolo|server':
+        $('#object_server').text(payload);
+        $('#object_server').removeClass('label-danger').addClass('label-success');
+        if (payload=="NotReady"){
+         document.getElementById("cloud-ready").style.color="#ff0066";
+         document.getElementById("cloud-transmission").style.color="#000000";
+         document.getElementById("cloud-analyze").style.color="#000000";
+         document.getElementById("cloud-deploy").style.color="#000000";
+	}else if(payload=="Transcating"){
+         document.getElementById("cloud-ready").style.color="#000000";
+         document.getElementById("cloud-transmission").style.color="#ff0066";
+         document.getElementById("cloud-analyze").style.color="#000000";
+         document.getElementById("cloud-deploy").style.color="#000000";
+	}else if(payload=="Analyzing"){
+         document.getElementById("cloud-ready").style.color="#000000";
+         document.getElementById("cloud-transmission").style.color="#000000";
+         document.getElementById("cloud-analyze").style.color="#ff0066";
+         document.getElementById("cloud-deploy").style.color="#000000";
+	}else if(payload=="Deploy"){
+         document.getElementById("cloud-ready").style.color="#000000";
+         document.getElementById("cloud-transmission").style.color="#000000";
+         document.getElementById("cloud-analyze").style.color="#000000";
+         document.getElementById("cloud-deploy").style.color="#ff0066";
+	}
 
         break;
 
